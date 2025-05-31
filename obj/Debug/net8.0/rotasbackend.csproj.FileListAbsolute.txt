@@ -1,0 +1,6 @@
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.csproj.AssemblyReference.cache
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.AssemblyInfoInputs.cache
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.AssemblyInfo.cs
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.csproj.CoreCompileInputs.cache
+C:\Users\JULIANODEOLIVEIRAFAR\Documents\rotasbackend\obj\Debug\net8.0\rotasbackend.MvcApplicationPartsAssemblyInfo.cache
