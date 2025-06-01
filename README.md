@@ -1,4 +1,4 @@
-## Título do Projeto: Sistema de Gerenciamento de Atendimento Médico
+## Sistema de Gerenciamento de Atendimento Médico
 
 ### 1. Objetivo do Projeto
  - O objetivo deste projeto é desenvolver uma API RESTful voltada à gestão de pacientes, médicos e especialidades dentro de um sistema de saúde. A aplicação foi concebida para permitir o cadastro, consulta, atualização e exclusão de dados relacionados a essas entidades.
