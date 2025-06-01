@@ -18,7 +18,7 @@ Essas entidades foram implementadas com classes C# e integradas ao banco de dado
 ### 2.2 Integração da API com a Solução
 A API foi organizada de forma modular, com rotas separadas por operação (GET, POST, PUT, DELETE). O modelo minimalista do .NET 8 foi adotado para construir as rotas de forma direta e expressiva, permitindo testes e interações fáceis com ferramentas como Postman.
 
-#### 3. Endpoints da API
+### 3. Endpoints da API
 
 | Método  | Rota                         | Descrição                            |
 |---------|------------------------------|----------------------------------------|
