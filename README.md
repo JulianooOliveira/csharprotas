@@ -5,7 +5,7 @@
 
 ### 2. Estrutura da Solução
 
-2.1 Modelagem de Dados - A modelagem do sistema foi dividida em três entidades principais:
+#### 2.1 Modelagem de Dados - A modelagem do sistema foi dividida em três entidades principais:
 
  - Paciente: contendo dados como nome, CPF, data de nascimento, email, telefone e endereço.
 
@@ -15,7 +15,7 @@
 
 Essas entidades foram implementadas com classes C# e integradas ao banco de dados via Entity Framework Core, utilizando SQLite como repositório principal.
 
-### 2.2 Integração da API com a Solução
+#### 2.2 Integração da API com a Solução
 A API foi organizada de forma modular, com rotas separadas por operação (GET, POST, PUT, DELETE). O modelo minimalista do .NET 8 foi adotado para construir as rotas de forma direta e expressiva, permitindo testes e interações fáceis com ferramentas como Postman.
 
 ### 3. Endpoints da API
