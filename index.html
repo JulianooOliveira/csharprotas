@@ -132,15 +132,16 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>CRM</th>
-                        <th>Nasc.</th>
+                        <th>Nascimento</th>
                         <th>Especialidade</th>
-                        <th>Valor (R$)</th>
+                        <th>Valor Consulta (R$)</th>
                         <th>UF</th>
                         <th>Telefone</th>
                     </tr>
                 </thead>
                 <tbody id="tabelaMedicos"></tbody>
             </table>
+            <p><strong>Valor total da consulta de todos os Médicos:</strong> <span id="somaValorConsultas">R$ 0,00</span></p>
         </div>
 
         <!-- CADASTRO DE PACIENTE -->
@@ -318,6 +319,9 @@
             const medicos = await resp.json();
             const tabela = document.getElementById("tabelaMedicos");
             tabela.innerHTML = "";
+
+            let soma = 0;
+
             medicos.forEach(m => {
                 const linha = document.createElement("tr");
                 linha.innerHTML = `
@@ -334,8 +338,16 @@
           <td>${m.crmUf}</td>
           <td>${m.telefoneProfissional}</td>`;
                 tabela.appendChild(linha);
+
+                soma += parseFloat(m.valorConsulta);
+            });
+
+            document.getElementById("somaValorConsultas").textContent = soma.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
             });
         }
+
 
         // --- PACIENTES ---
         async function salvarPaciente() {
