@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Context.Modelo;
+using ApiEspecialidade.Models;
 
 public static class Rota_DELETE
 {
@@ -18,16 +19,32 @@ public static class Rota_DELETE
             return Results.Ok("Paciente removido com sucesso.");
         });
 
-        // Deletar médico por ID
         app.MapDelete("/api/medicos/{id}", async (int id, SistemaSaudeContext context) =>
-        {
-            var medico = await context.Medicos.FindAsync(id);
-            if (medico is null) return Results.NotFound("Médico não encontrado.");
+{
+    try
+    {
+        var medico = await context.Medicos
+            .Include(m => m.Especialidades)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
-            context.Medicos.Remove(medico);
-            await context.SaveChangesAsync();
-            return Results.Ok("Médico removido com sucesso.");
-        });
+        if (medico is null)
+            return Results.NotFound("Médico não encontrado.");
+
+        foreach (var especialidade in medico.Especialidades ?? new List<Especialidade>())
+        {
+            especialidade.IdMedico = null;
+        }
+
+        context.Medicos.Remove(medico);
+        await context.SaveChangesAsync();
+        return Results.Ok("Médico removido com sucesso, especialidades desvinculadas.");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Erro interno: {ex.Message}");
+    }
+});
+
 
         // Deletar especialidade por ID
         app.MapDelete("/api/especialidades/{id}", async (int id, SistemaSaudeContext context) =>

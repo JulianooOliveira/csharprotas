@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace rotasbackend.Migrations
 {
     [DbContext(typeof(SistemaSaudeContext))]
-    [Migration("20250601225343_Inicial")]
-    partial class Inicial
+    [Migration("20250613153404_ChangeEspecialidades")]
+    partial class ChangeEspecialidades
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +30,7 @@ namespace rotasbackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdMedico")
+                    b.Property<int?>("IdMedico")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NivelComplexidade")
@@ -41,6 +41,8 @@ namespace rotasbackend.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdMedico");
 
                     b.ToTable("Especialidades");
                 });
@@ -73,6 +75,9 @@ namespace rotasbackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("ValorConsulta")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Medicos");
@@ -96,6 +101,18 @@ namespace rotasbackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("EspecialidadeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdEspecialidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdMedico")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MedicoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nascimento")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -108,9 +125,46 @@ namespace rotasbackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("ValorConsulta")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("EspecialidadeId");
+
+                    b.HasIndex("MedicoId");
+
                     b.ToTable("Pacientes");
+                });
+
+            modelBuilder.Entity("ApiEspecialidade.Models.Especialidade", b =>
+                {
+                    b.HasOne("ApiMedico.Models.Medico", "Medico")
+                        .WithMany("Especialidades")
+                        .HasForeignKey("IdMedico")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Medico");
+                });
+
+            modelBuilder.Entity("ApiPaciente.Models.Paciente", b =>
+                {
+                    b.HasOne("ApiEspecialidade.Models.Especialidade", "Especialidade")
+                        .WithMany()
+                        .HasForeignKey("EspecialidadeId");
+
+                    b.HasOne("ApiMedico.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId");
+
+                    b.Navigation("Especialidade");
+
+                    b.Navigation("Medico");
+                });
+
+            modelBuilder.Entity("ApiMedico.Models.Medico", b =>
+                {
+                    b.Navigation("Especialidades");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,11 +10,18 @@ public static class ROTA_GET
 
         // --- PACIENTES ---
         app.MapGet("/api/pacientes", async (SistemaSaudeContext db) =>
-            await db.Pacientes.ToListAsync());
+            await db.Pacientes
+        .Include(p => p.Medico)
+        .Include(p => p.Especialidade)
+        .ToListAsync());
 
         app.MapGet("/api/pacientes/{id}", async (int id, SistemaSaudeContext db) =>
         {
-            var paciente = await db.Pacientes.FindAsync(id);
+            var paciente = await db.Pacientes
+                .Include(p => p.Medico)
+                .Include(p => p.Especialidade)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             return paciente != null
                 ? Results.Ok(paciente)
                 : Results.NotFound("Paciente não encontrado.");

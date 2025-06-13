@@ -81,7 +81,8 @@ void PopularBancoDeDados(WebApplication app)
                 NomeMedico = "Dra. Ana Beatriz",
                 CrmMedico = 12345,
                 DataNascimentoMedico = new DateTime(1978, 6, 20),
-                EspecialidadePrincipal = "Psiquiatria",
+                EspecialidadePrincipal = "Saúde Mental Comunitária",
+                ValorConsulta = 259.90M,
                 CRMUf = "PR",
                 TelefoneProfissional = "44999887766"
             },
@@ -90,7 +91,8 @@ void PopularBancoDeDados(WebApplication app)
                 NomeMedico = "Dr. Rafael Torres",
                 CrmMedico = 67890,
                 DataNascimentoMedico = new DateTime(1982, 2, 14),
-                EspecialidadePrincipal = "Clínico Geral",
+                EspecialidadePrincipal = "Atenção Primária Integral",
+                ValorConsulta = 159.90M,
                 CRMUf = "PR",
                 TelefoneProfissional = "44999776655"
             }

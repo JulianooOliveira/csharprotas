@@ -10,39 +10,45 @@ public static class ROTA_PUT
     {
         // Atualizar Paciente
         app.MapPut("/api/pacientes/{id}", async (int id, Paciente pacienteAtualizado, SistemaSaudeContext db) =>
-        {
-            var paciente = await db.Pacientes.FindAsync(id);
-            if (paciente == null)
-                return Results.NotFound("Paciente não encontrado.");
+{
+    var paciente = await db.Pacientes.FindAsync(id);
+    if (paciente == null)
+        return Results.NotFound("Paciente não encontrado.");
 
-            paciente.NomeCompleto = pacienteAtualizado.NomeCompleto;
-            paciente.Nascimento = pacienteAtualizado.Nascimento;
-            paciente.DocumentoCPF = pacienteAtualizado.DocumentoCPF;
-            paciente.Email = pacienteAtualizado.Email;
-            paciente.Telefone = pacienteAtualizado.Telefone;
-            paciente.Endereco = pacienteAtualizado.Endereco;
+    paciente.NomeCompleto = pacienteAtualizado.NomeCompleto;
+    paciente.Nascimento = pacienteAtualizado.Nascimento;
+    paciente.DocumentoCPF = pacienteAtualizado.DocumentoCPF;
+    paciente.Email = pacienteAtualizado.Email;
+    paciente.Telefone = pacienteAtualizado.Telefone;
+    paciente.Endereco = pacienteAtualizado.Endereco;
+    paciente.IdMedico = pacienteAtualizado.IdMedico;
+    paciente.IdEspecialidade = pacienteAtualizado.IdEspecialidade;
+    paciente.ValorConsulta = pacienteAtualizado.ValorConsulta;
 
-            await db.SaveChangesAsync();
-            return Results.Ok(paciente);
-        });
+    await db.SaveChangesAsync();
+    return Results.Ok(paciente);
+});
+
 
         // Atualizar Medico
         app.MapPut("/api/medicos/{id}", async (int id, Medico medicoAtualizado, SistemaSaudeContext db) =>
-        {
-            var medico = await db.Medicos.FindAsync(id);
-            if (medico == null)
-                return Results.NotFound("Médico não encontrado.");
+{
+    var medico = await db.Medicos.FindAsync(id);
+    if (medico == null)
+        return Results.NotFound("Médico não encontrado.");
 
-            medico.NomeMedico = medicoAtualizado.NomeMedico;
-            medico.CrmMedico = medicoAtualizado.CrmMedico;
-            medico.DataNascimentoMedico = medicoAtualizado.DataNascimentoMedico;
-            medico.EspecialidadePrincipal = medicoAtualizado.EspecialidadePrincipal;
-            medico.CRMUf = medicoAtualizado.CRMUf;
-            medico.TelefoneProfissional = medicoAtualizado.TelefoneProfissional;
+    medico.NomeMedico = medicoAtualizado.NomeMedico;
+    medico.CrmMedico = medicoAtualizado.CrmMedico;
+    medico.DataNascimentoMedico = medicoAtualizado.DataNascimentoMedico;
+    medico.EspecialidadePrincipal = medicoAtualizado.EspecialidadePrincipal;
+    medico.CRMUf = medicoAtualizado.CRMUf;
+    medico.TelefoneProfissional = medicoAtualizado.TelefoneProfissional;
+    medico.ValorConsulta = medicoAtualizado.ValorConsulta; // 👈 Aqui estava faltando
 
-            await db.SaveChangesAsync();
-            return Results.Ok(medico);
-        });
+    await db.SaveChangesAsync();
+    return Results.Ok(medico);
+});
+
 
         // Atualizar Especialidade
         app.MapPut("/api/especialidades/{id}", async (int id, Especialidade especialidadeAtualizada, SistemaSaudeContext db) =>

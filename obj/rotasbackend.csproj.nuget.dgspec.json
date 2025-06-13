@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\casa\\Documents\\Projeto\\csharprotas\\rotasbackend.csproj": {}
+    "C:\\Users\\USER\\Documents\\Juliano\\Codigos\\cSharp\\csharprotas\\rotasbackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\casa\\Documents\\Projeto\\csharprotas\\rotasbackend.csproj": {
+    "C:\\Users\\USER\\Documents\\Juliano\\Codigos\\cSharp\\csharprotas\\rotasbackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\casa\\Documents\\Projeto\\csharprotas\\rotasbackend.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Documents\\Juliano\\Codigos\\cSharp\\csharprotas\\rotasbackend.csproj",
         "projectName": "rotasbackend",
-        "projectPath": "C:\\Users\\casa\\Documents\\Projeto\\csharprotas\\rotasbackend.csproj",
-        "packagesPath": "C:\\Users\\casa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\casa\\Documents\\Projeto\\csharprotas\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Documents\\Juliano\\Codigos\\cSharp\\csharprotas\\rotasbackend.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Documents\\Juliano\\Codigos\\cSharp\\csharprotas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\casa\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

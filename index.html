@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sistema de Saúde</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f3f3f3;
+        }
+
+        .container {
+            padding: 20px 40px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-edit {
+            cursor: pointer;
+            color: #17a2b8;
+            margin-right: 10px;
+        }
+
+        .btn-delete {
+            cursor: pointer;
+            color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        h1,
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Sistema de Saúde 🏥</h1>
+        </div>
+
+        <!-- CADASTRO DE ESPECIALIDADE -->
+        <div class="card">
+            <h2>Cadastro de Especialidade</h2>
+            <input id="especialidadeId" placeholder="ID" readonly />
+            <input id="nomeEspecialidade" placeholder="Nome da Especialidade" />
+            <input id="descricao" placeholder="Descrição" />
+            <input id="nivelComplexidade" placeholder="Nível de Complexidade (1-5)" type="number" />
+            <button class="btn-success" onclick="salvarEspecialidade()">Salvar Especialidade</button>
+            <button onclick="carregarEspecialidades()">🔁 Atualizar</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ações</th>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Complexidade</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaEspecialidades"></tbody>
+            </table>
+        </div>
+
+        <!-- CADASTRO DE MÉDICO -->
+        <div class="card">
+            <h2>Cadastro de Médico</h2>
+            <input id="medicoId" placeholder="ID" readonly />
+            <input id="nomeMedico" placeholder="Nome do Médico" />
+            <input id="crmMedico" placeholder="CRM" />
+            <input id="dataNascimentoMedico" placeholder="Nascimento (YYYY-MM-DD)" />
+            <select id="especialidadeMedicoSelect"></select>
+            <input id="valorConsultaMedico" placeholder="Valor da Consulta (R$)" type="number" step="0.01" />
+            <input id="crmUf" placeholder="UF do CRM" />
+            <input id="telefoneProfissional" placeholder="Telefone" />
+            <button class="btn-success" onclick="salvarMedico()">Salvar Médico</button>
+            <button onclick="carregarMedicos()">🔁 Atualizar</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ações</th>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CRM</th>
+                        <th>Nasc.</th>
+                        <th>Especialidade</th>
+                        <th>Valor (R$)</th>
+                        <th>UF</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaMedicos"></tbody>
+            </table>
+        </div>
+
+        <!-- CADASTRO DE PACIENTE -->
+        <div class="card">
+            <h2>Cadastro de Paciente</h2>
+            <input id="pacienteId" placeholder="ID" readonly />
+            <input id="nomeCompleto" placeholder="Nome Completo" />
+            <input id="nascimento" placeholder="Nascimento (YYYY-MM-DD)" />
+            <input id="documentoCPF" placeholder="CPF" />
+            <input id="email" placeholder="Email" />
+            <input id="telefone" placeholder="Telefone" />
+            <input id="endereco" placeholder="Endereço" />
+            <button class="btn-success" onclick="salvarPaciente()">Salvar Paciente</button>
+            <button onclick="carregarPacientes()">🔁 Atualizar</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ações</th>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Nascimento</th>
+                        <th>CPF</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaPacientes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://localhost:5180/api";
+
+        async function salvarEspecialidade() {
+            const id = document.getElementById("especialidadeId").value;
+
+            const especialidade = {
+                nomeEspecialidade: document.getElementById("nomeEspecialidade").value,
+                descricao: document.getElementById("descricao").value,
+                nivelComplexidade: parseInt(document.getElementById("nivelComplexidade").value),
+                idMedico: null
+            };
+
+            const method = id ? "PUT" : "POST";
+            const url = id ? `${API}/especialidades/${id}` : `${API}/especialidades`;
+
+            await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(especialidade)
+            });
+
+            // Atualiza tabela
+            carregarEspecialidades();
+
+            // Limpa os campos
+            document.getElementById("especialidadeId").value = "";
+            document.getElementById("nomeEspecialidade").value = "";
+            document.getElementById("descricao").value = "";
+            document.getElementById("nivelComplexidade").value = "";
+        }
+
+
+
+
+        async function editarEspecialidade(e) {
+            document.getElementById("especialidadeId").value = e.id;
+            document.getElementById("nomeEspecialidade").value = e.nomeEspecialidade;
+            document.getElementById("descricao").value = e.descricao;
+            document.getElementById("nivelComplexidade").value = e.nivelComplexidade;
+        }
+
+        async function excluirEspecialidade(id) {
+            await fetch(`${API}/especialidades/${id}`, { method: "DELETE" });
+            carregarEspecialidades();
+        }
+
+        async function carregarEspecialidades() {
+            const resp = await fetch(`${API}/especialidades`);
+            const especialidades = await resp.json();
+            const tabela = document.getElementById("tabelaEspecialidades");
+            const select = document.getElementById("especialidadeMedicoSelect");
+            tabela.innerHTML = "";
+            select.innerHTML = "<option value=''>Selecione</option>";
+
+            especialidades.forEach(e => {
+                const linha = document.createElement("tr");
+                linha.innerHTML = `
+          <td>
+            <span class="btn-edit" onclick='editarEspecialidade(${JSON.stringify(e)})'>✏️</span>
+            <span class="btn-delete" onclick='excluirEspecialidade(${e.id})'>🗑️</span>
+          </td>
+          <td>${e.id}</td>
+          <td>${e.nomeEspecialidade}</td>
+          <td>${e.descricao}</td>
+          <td>${e.nivelComplexidade}</td>`;
+                tabela.appendChild(linha);
+
+                const option = document.createElement("option");
+                option.value = e.nomeEspecialidade;
+                option.text = e.nomeEspecialidade;
+                select.appendChild(option);
+            });
+        }
+
+        // --- MÉDICOS ---
+        async function salvarMedico() {
+            const id = document.getElementById("medicoId").value;
+
+            const medico = {
+                nomeMedico: document.getElementById("nomeMedico").value.trim(),
+                crmMedico: parseInt(document.getElementById("crmMedico").value),
+                dataNascimentoMedico: document.getElementById("dataNascimentoMedico").value,
+                especialidadePrincipal: document.getElementById("especialidadeMedicoSelect").value.trim(),
+                valorConsulta: parseFloat(document.getElementById("valorConsultaMedico").value) || 0,
+                crmUf: document.getElementById("crmUf").value.trim(),
+                telefoneProfissional: document.getElementById("telefoneProfissional").value.trim()
+            };
+
+            // Validação mínima no front
+            if (!medico.nomeMedico || !medico.crmUf || !medico.telefoneProfissional || !medico.especialidadePrincipal) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
+
+            const method = id ? "PUT" : "POST";
+            const url = id ? `${API}/medicos/${id}` : `${API}/medicos`;
+
+            const response = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(medico)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                alert("Erro ao salvar médico: " + errorText);
+                return;
+            }
+
+            carregarMedicos();
+
+            // Limpa os campos
+            document.getElementById("medicoId").value = "";
+            document.getElementById("nomeMedico").value = "";
+            document.getElementById("crmMedico").value = "";
+            document.getElementById("dataNascimentoMedico").value = "";
+            document.getElementById("especialidadeMedicoSelect").value = "";
+            document.getElementById("valorConsultaMedico").value = "";
+            document.getElementById("crmUf").value = "";
+            document.getElementById("telefoneProfissional").value = "";
+        }
+
+        async function editarMedico(m) {
+            document.getElementById("medicoId").value = m.id;
+            document.getElementById("nomeMedico").value = m.nomeMedico;
+            document.getElementById("crmMedico").value = m.crmMedico;
+            document.getElementById("dataNascimentoMedico").value = m.dataNascimentoMedico?.split("T")[0] || "";
+            document.getElementById("especialidadeMedicoSelect").value = m.especialidadePrincipal;
+            document.getElementById("valorConsultaMedico").value = m.valorConsulta;
+            document.getElementById("crmUf").value = m.crmUf;
+            document.getElementById("telefoneProfissional").value = m.telefoneProfissional;
+        }
+
+
+        async function excluirMedico(id) {
+            await fetch(`${API}/medicos/${id}`, { method: "DELETE" });
+            carregarMedicos();
+        }
+
+        async function carregarMedicos() {
+            const resp = await fetch(`${API}/medicos`);
+            const medicos = await resp.json();
+            const tabela = document.getElementById("tabelaMedicos");
+            tabela.innerHTML = "";
+            medicos.forEach(m => {
+                const linha = document.createElement("tr");
+                linha.innerHTML = `
+          <td>
+            <span class="btn-edit" onclick='editarMedico(${JSON.stringify(m)})'>✏️</span>
+            <span class="btn-delete" onclick='excluirMedico(${m.id})'>🗑️</span>
+          </td>
+          <td>${m.id}</td>
+          <td>${m.nomeMedico}</td>
+          <td>${m.crmMedico}</td>
+          <td>${m.dataNascimentoMedico}</td>
+          <td>${m.especialidadePrincipal}</td>
+          <td>${m.valorConsulta}</td>
+          <td>${m.crmUf}</td>
+          <td>${m.telefoneProfissional}</td>`;
+                tabela.appendChild(linha);
+            });
+        }
+
+        // --- PACIENTES ---
+        async function salvarPaciente() {
+            const id = document.getElementById("pacienteId").value;
+
+            const paciente = {
+                nomeCompleto: document.getElementById("nomeCompleto").value,
+                nascimento: document.getElementById("nascimento").value,
+                documentoCPF: document.getElementById("documentoCPF").value,
+                email: document.getElementById("email").value,
+                telefone: document.getElementById("telefone").value,
+                endereco: document.getElementById("endereco").value,
+                idMedico: 1, // ajustar se for escolher no futuro
+                idEspecialidade: 1, // idem acima
+                valorConsulta: 0
+            };
+
+            const method = id ? "PUT" : "POST";
+            const url = id ? `${API}/pacientes/${id}` : `${API}/pacientes`;
+
+            await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(paciente)
+            });
+
+            carregarPacientes();
+
+            // Limpa os campos
+            document.getElementById("pacienteId").value = "";
+            document.getElementById("nomeCompleto").value = "";
+            document.getElementById("nascimento").value = "";
+            document.getElementById("documentoCPF").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("telefone").value = "";
+            document.getElementById("endereco").value = "";
+        }
+
+
+        async function editarPaciente(p) {
+            document.getElementById("pacienteId").value = p.id;
+            document.getElementById("nomeCompleto").value = p.nomeCompleto;
+            document.getElementById("nascimento").value = p.nascimento;
+            document.getElementById("documentoCPF").value = p.documentoCPF;
+            document.getElementById("email").value = p.email;
+            document.getElementById("telefone").value = p.telefone;
+            document.getElementById("endereco").value = p.endereco;
+        }
+
+        async function excluirPaciente(id) {
+            await fetch(`${API}/pacientes/${id}`, { method: "DELETE" });
+            carregarPacientes();
+        }
+
+        async function carregarPacientes() {
+            const resp = await fetch(`${API}/pacientes`);
+            const pacientes = await resp.json();
+            const tabela = document.getElementById("tabelaPacientes");
+            tabela.innerHTML = "";
+            pacientes.forEach(p => {
+                const linha = document.createElement("tr");
+                linha.innerHTML = `
+          <td>
+            <span class="btn-edit" onclick='editarPaciente(${JSON.stringify(p)})'>✏️</span>
+            <span class="btn-delete" onclick='excluirPaciente(${p.id})'>🗑️</span>
+          </td>
+          <td>${p.id}</td>
+          <td>${p.nomeCompleto}</td>
+          <td>${p.nascimento}</td>
+          <td>${p.documentoCPF}</td>
+          <td>${p.email}</td>
+          <td>${p.telefone}</td>
+          <td>${p.endereco}</td>`;
+                tabela.appendChild(linha);
+            });
+        }
+
+        // Inicializar
+        carregarEspecialidades();
+        carregarMedicos();
+        carregarPacientes();
+    </script>
+</body>
+
+</html>
